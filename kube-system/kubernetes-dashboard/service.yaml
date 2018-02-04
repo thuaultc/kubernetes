@@ -1,0 +1,16 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kubernetes-dashboard
+  namespace: kube-system
+  labels:
+    k8s-app: kubernetes-dashboard
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 9090
+    protocol: TCP
+  selector:
+    k8s-app: kubernetes-dashboard

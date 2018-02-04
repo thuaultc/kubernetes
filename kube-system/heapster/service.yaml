@@ -1,0 +1,17 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: heapster
+  namespace: kube-system
+  labels:
+    k8s-app: heapster
+    task: monitoring
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8082
+    protocol: TCP
+  selector:
+    k8s-app: heapster
