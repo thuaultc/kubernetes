@@ -12,7 +12,7 @@ spec:
         app: la-quete
     spec:
       containers:
-      - image: registry.app.satreix.fr/clement/la-quete:1.1
+      - image: registry.app.satreix.fr/clement/la-quete:1.1.2
         imagePullPolicy: Always
         name: la-quete
         ports:
