@@ -1,0 +1,19 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: la-quete
+  namespace: la-quete
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: la-quete
+    spec:
+      containers:
+      - image: registry.app.satreix.fr/clement/la-quete:1.1
+        imagePullPolicy: Always
+        name: la-quete
+        ports:
+        - containerPort: 8080
