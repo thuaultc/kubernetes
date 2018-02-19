@@ -11,8 +11,10 @@ spec:
       labels:
         app: la-quete
     spec:
+      imagePullSecrets:
+      - name: registry-credentials
       containers:
-      - image: registry.app.satreix.fr/clement/la-quete:1.1.5
+      - image: registry.thuault.com/clement/la-quete:1.1.5
         imagePullPolicy: Always
         name: la-quete
         ports:
