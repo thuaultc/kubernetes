@@ -1,0 +1,61 @@
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: registry
+  namespace: registry
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: registry
+    spec:
+      containers:
+      - name: registry
+        image: registry:2
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: REGISTRY_HTTP_ADDR
+          value: :5000
+        - name: REGISTRY_HTTP_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: ha-registry
+              key: secret
+        - name: REGISTRY_AUTH
+          value: htpasswd
+        - name: REGISTRY_AUTH_HTPASSWD_PATH
+          value: /auth/passwd
+        - name: REGISTRY_AUTH_HTPASSWD_REALM
+          value: "Authentication Required - Registry"
+        - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
+          value: /var/lib/registry
+        volumeMounts:
+        - name: image-store
+          mountPath: /var/lib/registry
+        - name: auth-passwd
+          mountPath: /auth
+        ports:
+        - containerPort: 5000
+          name: registry
+          protocol: TCP
+      volumes:
+      - name: image-store
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: registry
+            clusterName: rook
+            path: /
+      - name: auth-passwd
+        secret:
+          secretName: basic-auth-registry

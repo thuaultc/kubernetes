@@ -1,0 +1,17 @@
+---
+kind: Filesystem
+apiVersion: rook.io/v1alpha1
+metadata:
+  name: registry
+  namespace: rook
+spec:
+  metadataPool:
+    replicated:
+      size: 1
+  dataPools:
+    - failureDomain: osd
+      replicated:
+        size: 1
+  metadataServer:
+    activeCount: 1
+    activeStandby: true
