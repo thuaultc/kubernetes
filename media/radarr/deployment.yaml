@@ -55,4 +55,4 @@ spec:
           options:
             fsName: media
             clusterName: rook
-            path: /library/videos/tv
+            path: /library/videos/movies
