@@ -1,0 +1,58 @@
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: radarr
+  namespace: media
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: radarr
+    spec:
+      containers:
+      - name: radarr
+        image: linuxserver/radarr
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 7878
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: Europe/Paris
+        volumeMounts:
+        - name: radarr-config
+          mountPath: /config
+        - name: radarr-downloads
+          mountPath: /downloads
+        - name: radarr-movies
+          mountPath: /movies
+      volumes:
+      - name: radarr-config
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: media
+            clusterName: rook
+            path: /config/radarr
+      - name: radarr-downloads
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: media
+            clusterName: rook
+            path: /downloads/completed
+      - name: radarr-movies
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: media
+            clusterName: rook
+            path: /library/videos/tv

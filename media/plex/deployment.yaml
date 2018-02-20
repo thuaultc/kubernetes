@@ -1,0 +1,78 @@
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: plex
+  namespace: media
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: plex
+    spec:
+      #hostNetwork: true
+      containers:
+      - name: plex
+        image: plexinc/pms-docker
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 32400
+          name: plex
+        - containerPort: 32400
+          name: plex-udp
+          protocol: UDP
+        - containerPort: 32469
+          name: plex2
+        - containerPort: 32469
+          name: plex2-udp
+          protocol: UDP
+        - containerPort: 5353
+          name: plex3-udp
+          protocol: UDP
+        - containerPort: 1900
+          name: plex4-udp
+          protocol: UDP
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: VERSION
+          value: "latest"
+        - name: TZ
+          value: Europe/Paris
+        - name: PLEX_CLAIM
+          value: claim-ks8E6gsQEiDifZUfS2zM
+        volumeMounts:
+        - name: plex-config
+          mountPath: /config
+        - name: plex-media
+          mountPath: /data
+        - name: plex-transcode
+          mountPath: /transcode
+      volumes:
+      - name: plex-config
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: media
+            clusterName: rook
+            path: /config/plex
+      - name: plex-media
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: media
+            clusterName: rook
+            path: /library/videos
+      - name: plex-transcode
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: media
+            clusterName: rook
+            path: /transcode

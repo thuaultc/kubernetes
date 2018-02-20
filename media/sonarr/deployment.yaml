@@ -1,0 +1,58 @@
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: sonarr
+  namespace: media
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      containers:
+      - name: sonarr
+        image: linuxserver/sonarr
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8989
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: Europe/Paris
+        volumeMounts:
+        - name: sonarr-config
+          mountPath: /config
+        - name: sonarr-downloads
+          mountPath: /downloads
+        - name: sonarr-tv
+          mountPath: /tv
+      volumes:
+      - name: sonarr-config
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: media
+            clusterName: rook
+            path: /config/sonarr
+      - name: sonarr-downloads
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: media
+            clusterName: rook
+            path: /downloads/completed
+      - name: sonarr-tv
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: media
+            clusterName: rook
+            path: /library/videos/tv

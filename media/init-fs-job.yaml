@@ -1,0 +1,28 @@
+---
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: init-fs
+  namespace: media
+spec:
+  template:
+    metadata:
+      name: init-fs
+    spec:
+      containers:
+      - name: init
+        image: centos:7
+        command: ["bin/bash", "-c", "mkdir -p /media/config/{plex,sonarr,radarr,transmission} /media/library/videos/{movies,tv} /media/transcode /media/downloads/{completed,watch}"]
+        volumeMounts:
+        - name: media
+          mountPath: /media
+      restartPolicy: Never
+      volumes:
+      - name: media
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: media
+            clusterName: rook
+            path: /

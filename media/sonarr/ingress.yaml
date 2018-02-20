@@ -1,0 +1,22 @@
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: sonarr
+  namespace: media
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  tls:
+  - hosts:
+    - sonarr.thuault.com
+    secretName: sonarr-tls
+  rules:
+  - host: sonarr.thuault.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: sonarr
+          servicePort: 80

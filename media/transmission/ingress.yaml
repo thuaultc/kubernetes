@@ -1,0 +1,22 @@
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: transmission
+  namespace: media
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  tls:
+  - hosts:
+    - transmission.thuault.com
+    secretName: transmission-tls
+  rules:
+  - host: transmission.thuault.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: transmission
+          servicePort: 80

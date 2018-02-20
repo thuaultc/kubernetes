@@ -1,0 +1,62 @@
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: transmission
+  namespace: media
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: transmission
+    spec:
+      containers:
+      - name: transmission
+        image: linuxserver/transmission
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9091
+          name: webui
+        - containerPort: 51413
+          name: peer
+          protocol: UDP
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: Europe/Paris
+        volumeMounts:
+        - name: transmission-config
+          mountPath: /config
+        - name: transmission-downloads
+          mountPath: /downloads
+        - name: transmission-watch
+          mountPath: /watch
+      volumes:
+      - name: transmission-config
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: media
+            clusterName: rook
+            path: /config/transmission
+      - name: transmission-downloads
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: media
+            clusterName: rook
+            path: /downloads/completed
+      - name: transmission-watch
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: media
+            clusterName: rook
+            path: /downloads/watch
