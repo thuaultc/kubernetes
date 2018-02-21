@@ -31,6 +31,13 @@ spec:
           mountPath: /downloads
         - name: radarr-movies
           mountPath: /movies
+        resources:
+          limits:
+            cpu: 500m
+            memory: 2Gi
+          requests:
+            cpu: 500m
+            memory: 2Gi
       volumes:
       - name: radarr-config
         flexVolume:

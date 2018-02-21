@@ -35,6 +35,13 @@ spec:
           mountPath: /downloads
         - name: transmission-watch
           mountPath: /watch
+        resources:
+          limits:
+            cpu: 2
+            memory: 8Gi
+          requests:
+            cpu: 2
+            memory: 8Gi
       volumes:
       - name: transmission-config
         flexVolume:

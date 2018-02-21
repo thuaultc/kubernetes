@@ -51,6 +51,13 @@ spec:
           mountPath: /data
         - name: plex-transcode
           mountPath: /transcode
+        resources:
+          limits:
+            cpu: 5
+            memory: 12Gi
+          requests:
+            cpu: 5
+            memory: 12Gi
       volumes:
       - name: plex-config
         flexVolume:

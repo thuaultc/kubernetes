@@ -31,6 +31,13 @@ spec:
           mountPath: /downloads
         - name: sonarr-tv
           mountPath: /tv
+        resources:
+          limits:
+            cpu: 500m
+            memory: 2Gi
+          requests:
+            cpu: 500m
+            memory: 2Gi
       volumes:
       - name: sonarr-config
         flexVolume:
