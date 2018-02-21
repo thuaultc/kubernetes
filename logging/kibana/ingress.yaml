@@ -1,0 +1,22 @@
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: kibana
+  namespace: logging
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  tls:
+  - hosts:
+    - kibana.thuault.com
+    secretName: kibana-tls
+  rules:
+  - host: kibana.thuault.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kibana
+          servicePort: 5601
