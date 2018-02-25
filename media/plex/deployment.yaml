@@ -44,6 +44,8 @@ spec:
           value: Europe/Paris
         - name: PLEX_CLAIM
           value: claim-ks8E6gsQEiDifZUfS2zM
+        - name:  ADVERTISE_IP
+          value: https://plex.thuault.com
         volumeMounts:
         - name: plex-config
           mountPath: /config
