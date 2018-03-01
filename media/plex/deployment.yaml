@@ -43,7 +43,7 @@ spec:
         - name: TZ
           value: Europe/Paris
         - name: PLEX_CLAIM
-          value: claim-ks8E6gsQEiDifZUfS2zM
+          value: claim-M4kKgEpkBss3rijtssm6
         - name:  ADVERTISE_IP
           value: https://plex.thuault.com
         volumeMounts:
@@ -55,10 +55,10 @@ spec:
           mountPath: /transcode
         resources:
           limits:
-            cpu: 5
+            cpu: 3
             memory: 12Gi
           requests:
-            cpu: 5
+            cpu: 3
             memory: 12Gi
       volumes:
       - name: plex-config
