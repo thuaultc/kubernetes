@@ -17,11 +17,11 @@ spec:
         imagePullPolicy: Always
         resources:
           limits:
-            cpu: 100m
-            memory: 100Mi
+            cpu: 200m
+            memory: 250Mi
           requests:
-            cpu: 100m
-            memory: 100Mi
+            cpu: 200m
+            memory: 250Mi
         env:
         - name: REGISTRY_HTTP_ADDR
           value: :5000
