@@ -43,7 +43,7 @@ spec:
         - name: TZ
           value: Europe/Paris
         - name: PLEX_CLAIM
-          value: claim-M4kKgEpkBss3rijtssm6
+          value: claim-YNUPt3N66UxzvfEyXLAQ
         - name:  ADVERTISE_IP
           value: https://plex.thuault.com
         volumeMounts:
@@ -66,22 +66,22 @@ spec:
           driver: rook.io/rook
           fsType: ceph
           options:
-            fsName: media
+            fsName: filesystem
             clusterName: rook
-            path: /config/plex
+            path: /media/config/plex
       - name: plex-media
         flexVolume:
           driver: rook.io/rook
           fsType: ceph
           options:
-            fsName: media
+            fsName: filesystem
             clusterName: rook
-            path: /library/videos
+            path: /media/library/videos
       - name: plex-transcode
         flexVolume:
           driver: rook.io/rook
           fsType: ceph
           options:
-            fsName: media
+            fsName: filesystem
             clusterName: rook
-            path: /transcode
+            path: /media/transcode

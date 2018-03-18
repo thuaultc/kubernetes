@@ -48,22 +48,22 @@ spec:
           driver: rook.io/rook
           fsType: ceph
           options:
-            fsName: media
+            fsName: filesystem
             clusterName: rook
-            path: /config/transmission
+            path: /media/config/transmission
       - name: transmission-downloads
         flexVolume:
           driver: rook.io/rook
           fsType: ceph
           options:
-            fsName: media
+            fsName: filesystem
             clusterName: rook
-            path: /downloads/completed
+            path: /media/downloads/completed
       - name: transmission-watch
         flexVolume:
           driver: rook.io/rook
           fsType: ceph
           options:
-            fsName: media
+            fsName: filesystem
             clusterName: rook
-            path: /downloads/watch
+            path: /media/downloads/watch

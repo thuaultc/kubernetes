@@ -44,22 +44,22 @@ spec:
           driver: rook.io/rook
           fsType: ceph
           options:
-            fsName: media
+            fsName: filesystem
             clusterName: rook
-            path: /config/sonarr
+            path: /media/config/sonarr
       - name: sonarr-downloads
         flexVolume:
           driver: rook.io/rook
           fsType: ceph
           options:
-            fsName: media
+            fsName: filesystem
             clusterName: rook
-            path: /downloads/completed
+            path: /media/downloads/completed
       - name: sonarr-tv
         flexVolume:
           driver: rook.io/rook
           fsType: ceph
           options:
-            fsName: media
+            fsName: filesystem
             clusterName: rook
-            path: /library/videos/tv
+            path: /media/library/videos/tv

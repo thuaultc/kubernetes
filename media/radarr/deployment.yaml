@@ -44,22 +44,22 @@ spec:
           driver: rook.io/rook
           fsType: ceph
           options:
-            fsName: media
+            fsName: filesystem
             clusterName: rook
-            path: /config/radarr
+            path: /media/config/radarr
       - name: radarr-downloads
         flexVolume:
           driver: rook.io/rook
           fsType: ceph
           options:
-            fsName: media
+            fsName: filesystem
             clusterName: rook
-            path: /downloads/completed
+            path: /media/downloads/completed
       - name: radarr-movies
         flexVolume:
           driver: rook.io/rook
           fsType: ceph
           options:
-            fsName: media
+            fsName: filesystem
             clusterName: rook
-            path: /library/videos/movies
+            path: /media/library/videos/movies

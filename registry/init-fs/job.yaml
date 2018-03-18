@@ -3,7 +3,7 @@ kind: Job
 apiVersion: batch/v1
 metadata:
   name: init-fs
-  namespace: media
+  namespace: registry
 spec:
   template:
     metadata:
@@ -12,17 +12,22 @@ spec:
       containers:
       - name: init
         image: centos:7
-        command: ["bin/bash", "-c", "mkdir -p /media/config/{plex,sonarr,radarr,transmission} /media/library/videos/{movies,tv} /media/transcode /media/downloads/{completed,watch}"]
+        command: ["/bin/bash", "/script/init.sh"]
         volumeMounts:
-        - name: media
-          mountPath: /media
+        - name: init-fs-script
+          mountPath: /script
+        - name: filesystem
+          mountPath: /filesystem
       restartPolicy: Never
       volumes:
-      - name: media
+      - name: init-fs-script
+        configMap:
+          name: init-fs-script
+      - name: filesystem
         flexVolume:
           driver: rook.io/rook
           fsType: ceph
           options:
-            fsName: media
+            fsName: filesystem
             clusterName: rook
             path: /

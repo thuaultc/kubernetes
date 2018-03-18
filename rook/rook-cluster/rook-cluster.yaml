@@ -56,32 +56,32 @@ spec:
 # The requests and limits set here, allow the api Pod to use half of one CPU core and 1 gigabyte of memory
       limits:
         cpu: "300m"
-        memory: "1024Mi"
+        memory: "512Mi"
       requests:
         cpu: "300m"
-        memory: "1024Mi"
+        memory: "512Mi"
 # the above example requests/limits can also be added to the other components too
     mgr:
       limits:
-        cpu: "400m"
-        memory: "1024Mi"
+        cpu: "300m"
+        memory: "512Mi"
       requests:
-        cpu: "400m"
-        memory: "1024Mi"
+        cpu: "300m"
+        memory: "512Mi"
     mon:
       limits:
-        cpu: "400m"
-        memory: "1024Mi"
+        cpu: "300m"
+        memory: "512Mi"
       requests:
-        cpu: "400m"
-        memory: "1024Mi"
+        cpu: "300m"
+        memory: "512Mi"
     osd:
       limits:
-        cpu: "850m"
-        memory: "2048Mi"
+        cpu: "800m"
+        memory: "2Gi"
       requests:
-        cpu: "850m"
-        memory: "2048Mi"
+        cpu: "800m"
+        memory: "1Gi"
   storage: # cluster level storage configuration and selection
     useAllNodes: true
     useAllDevices: false

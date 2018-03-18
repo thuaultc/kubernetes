@@ -1,0 +1,33 @@
+---
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: init-fs
+  namespace: media
+spec:
+  template:
+    metadata:
+      name: init-fs
+    spec:
+      containers:
+      - name: init
+        image: centos:7
+        command: ["/bin/bash", "/script/init.sh"]
+        volumeMounts:
+        - name: init-fs-script
+          mountPath: /script
+        - name: filesystem
+          mountPath: /filesystem
+      restartPolicy: Never
+      volumes:
+      - name: init-fs-script
+        configMap:
+          name: init-fs-script
+      - name: filesystem
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: filesystem
+            clusterName: rook
+            path: /

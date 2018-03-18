@@ -1,5 +1,6 @@
-apiVersion: rook.io/v1alpha1
+---
 kind: Pool
+apiVersion: rook.io/v1alpha1
 metadata:
   name: pool
   namespace: rook
