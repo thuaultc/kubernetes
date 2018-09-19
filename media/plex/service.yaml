@@ -11,3 +11,17 @@ spec:
     targetPort: 32400
   selector:
     app: plex
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: plex-proxy
+  namespace: media
+spec:
+  type: NodePort
+  ports:
+  - name: pms
+    port: 32400
+    targetPort: 32400
+  selector:
+    app: plex
