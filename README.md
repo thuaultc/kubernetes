@@ -1,4 +1,6 @@
-# Kubernetes manifests
+
+
+# :rocket: Kubernetes manifests
 
 This repository contains manifests for the deployment of several services on my
 dedicated cluster.
