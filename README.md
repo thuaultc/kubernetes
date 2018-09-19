@@ -17,6 +17,15 @@ All manifests not associated with a specific GitHub repository can be retrieved 
 * **media:** Radarr/Sonarr/Transmission/Plex media stack based upon Rook shared storage
 * **minecraft:** Simple minecraft server deployment
 
+## Usage
+
+With a working Kubernetes cluster, run:
+
+
+```
+kubectl apply -f <manifest-you-want-to-apply>
+```
+
 ## Environment
 
 This was tested and deployed on the following environment:
