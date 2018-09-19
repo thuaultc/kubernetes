@@ -5,7 +5,7 @@ metadata:
   name: registry
   namespace: registry
 spec:
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
@@ -25,11 +25,6 @@ spec:
         env:
         - name: REGISTRY_HTTP_ADDR
           value: :5000
-        - name: REGISTRY_HTTP_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: ha-registry
-              key: secret
         - name: REGISTRY_AUTH
           value: htpasswd
         - name: REGISTRY_AUTH_HTPASSWD_PATH
@@ -49,13 +44,10 @@ spec:
           protocol: TCP
       volumes:
       - name: image-store
-        flexVolume:
-          driver: rook.io/rook
-          fsType: ceph
-          options:
-            fsName: filesystem
-            clusterName: rook
-            path: /registry
+        hostPath:
+          path: /root/registry/images
       - name: auth-passwd
         secret:
           secretName: basic-auth-registry
+      nodeSelector:
+        name: k8s-master-1
