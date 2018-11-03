@@ -1,5 +1,19 @@
-apiVersion: v1
+---
 kind: Service
+apiVersion: v1
+metadata:
+  name: minecraft-dynmap
+  namespace: minecraft
+spec:
+  ports:
+  - port: 80
+    targetPort: 8123
+    protocol: TCP
+  selector:
+    app: minecraft
+---
+kind: Service
+apiVersion: v1
 metadata:
   name: minecraft
   namespace: minecraft
