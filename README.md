@@ -32,7 +32,7 @@ This was tested and deployed on the following environment:
 
 * Nodes: 3
 * OS: CoreOS - Alpha (Online.net)
-* Version: Kubernetes v1.12.0
+* Version: Kubernetes v1.12.4
 
 ## Authors
 
