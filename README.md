@@ -1,7 +1,7 @@
-# :rocket: Kubernetes manifests
+# :rocket: Kubernetes
 
 This repository contains manifests for the deployment of several services on my
-dedicated cluster.
+dedicated Kubernetes cluster.
 
 ## What's in there ?
 
@@ -30,9 +30,9 @@ kubectl apply -f <manifest-you-want-to-apply>
 
 This was tested and deployed on the following environment:
 
-* Nodes: 1 master - 2 slaves
+* Nodes: 3
 * OS: CoreOS - Alpha (Online.net)
-* Version: Kubernetes v1.9.0
+* Version: Kubernetes v1.12.0
 
 ## Authors
 
