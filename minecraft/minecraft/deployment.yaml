@@ -43,8 +43,10 @@ spec:
           value: "DEFAULT"
         - name: ANNOUNCE_PLAYER_ACHIEVEMENTS
           value: "false"
+        - name: INIT_MEMORY
+          value: "8G"
         - name: MAX_MEMORY
-          value: "4G"
+          value: "12G"
         - name: TYPE
           value: "SPIGOT"
         - name: VERSION
