@@ -6,16 +6,10 @@
 $ helm fetch <chart> --untar --untardir charts
 ```
 
-## Install release
+## Install or upgrade release
 
 ```bash
-$ helm install --namespace <namespace> --name <release> -f ./releases/<chart>/values.yml ./charts/<chart>
-```
-
-## Upgrade release
-
-```bash
-$ helm upgrade --namespace <namespace> -f ./releases/<chart>/values.yml <release> ./charts/<chart>
+$ helm upgrade --install <release> --namespace <namespace> --values ./releases/<chart>/values.yml ./charts/<chart>
 ```
 
 ## Delete release
