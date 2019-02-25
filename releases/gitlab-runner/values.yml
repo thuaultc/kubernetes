@@ -1,0 +1,35 @@
+gitlabUrl: https://gitlab.com/
+concurrent: 10
+checkInterval: 30
+
+rbac:
+  create: true
+
+runners:
+  image: ubuntu:16.04
+  privileged: true
+  runUntaggedJobs: true
+
+  builds:
+    cpuLimit: 200m
+    memoryLimit: 256Mi
+    cpuRequests: 100m
+    memoryRequests: 128Mi
+  services:
+    cpuLimit: 200m
+    memoryLimit: 256Mi
+    cpuRequests: 100m
+    memoryRequests: 128Mi
+  helpers:
+    cpuLimit: 200m
+    memoryLimit: 256Mi
+    cpuRequests: 100m
+    memoryRequests: 128Mi
+
+resources:
+  limits:
+    memory: 256Mi
+    cpu: 500m
+  requests:
+    memory: 128Mi
+    cpu: 100m
