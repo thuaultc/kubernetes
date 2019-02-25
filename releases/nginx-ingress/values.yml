@@ -1,0 +1,6 @@
+controller:
+  service:
+    externalIPs:
+      - 62.210.152.42
+      - 62.210.152.48
+      - 163.172.7.245

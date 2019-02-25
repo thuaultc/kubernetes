@@ -1,0 +1,3 @@
+config:
+  LEGO_EMAIL: thuaultc@gmail.com
+  LEGO_URL: https://acme-v01.api.letsencrypt.org/directory
