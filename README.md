@@ -7,6 +7,7 @@ dedicated Kubernetes cluster.
 
 All manifests not associated with a specific GitHub repository can be retrieved here, split in their corresponding namespace :
 
+* **helm:** Helm installation
 * **kube-system:** Basic kubernetes services
 * **kube-lego:** Let's encrypt automatic renewal
 * **ingress-nginx:** NGINX Ingress engine with HTTPS handling (using kube-lego)
@@ -19,20 +20,13 @@ All manifests not associated with a specific GitHub repository can be retrieved 
 
 ## Usage
 
-With a working Kubernetes cluster, run:
+### Helm installation
 
+With a working Kubernetes cluster, execute the following script:
 
 ```
-kubectl apply -f <manifest-you-want-to-apply>
+./helm/install.sh
 ```
-
-## Environment
-
-This was tested and deployed on the following environment:
-
-* Nodes: 3
-* OS: CoreOS - Alpha (Online.net)
-* Version: Kubernetes v1.12.4
 
 ## Authors
 
