@@ -1,0 +1,12 @@
+ingress:
+  enabled: true
+  path: /
+  hosts:
+    - registry.thuault.com
+  tls:
+    - secretName: registry-tls
+      hosts:
+        - registry.thuault.com
+  annotations:
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
