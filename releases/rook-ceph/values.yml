@@ -1,0 +1,6 @@
+agent:
+  flexVolumeDirPath: /var/lib/kubelet/volumeplugins
+
+pspEnable: false
+
+enableSelinuxRelabeling: false
