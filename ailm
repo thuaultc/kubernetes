@@ -53,7 +53,7 @@ execute_install() {
     --install $RELEASE \
     --namespace $RELEASE \
     $VALUES_ARGS \
-    $CHART_DIRECTORY
+    $CHART_DIR
 
   # Apply post install manifests if needed
   if [ -d "$POST_INSTALL_DIRECTORY" ]; then
