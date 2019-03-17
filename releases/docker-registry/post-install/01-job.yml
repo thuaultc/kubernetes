@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-fs
+  namespace: docker-registry
+spec:
+  template:
+    metadata:
+      name: init-fs
+    spec:
+      containers:
+      - name: init
+        image: centos:7
+        command: ["/bin/bash", "/script/init.sh"]
+        volumeMounts:
+        - name: init-fs-script
+          mountPath: /script
+        - name: filesystem
+          mountPath: /filesystem
+      restartPolicy: Never
+      volumes:
+      - name: init-fs-script
+        configMap:
+          name: init-fs-script
+      - name: filesystem
+        flexVolume:
+          driver: ceph.rook.io/rook
+          fsType: ceph
+          options:
+            clusterNamespace: rook-ceph
+            fsName: filesystem
+            path: /

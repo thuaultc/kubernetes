@@ -8,6 +8,10 @@ dedicated Kubernetes cluster.
 ```
 ./ailm install nginx-ingress
 ./ailm install cert-manager
+./ailm install rook-ceph
+./ailm install coreos-update
+./ailm install docker-registry
+./ailm install gitlab-runner
 ```
 
 ## Authors

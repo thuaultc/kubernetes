@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  labels:
+    name: docker-registry
+  name: docker-registry
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 200Gi
+  flexVolume:
+    driver: ceph.rook.io/rook
+    fsType: ceph
+    options:
+      clusterNamespace: rook-ceph
+      fsName: filesystem
+      path: /registry
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: rook-cephfs

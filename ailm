@@ -37,27 +37,38 @@ execute_install() {
   RELEASE_DIR="$RELEASES_PATH/$RELEASE"
 
   PRE_INSTALL_DIR=$RELEASE_DIR/pre-install
+  INSTALL_DIR=$RELEASE_DIR/install
   POST_INSTALL_DIR=$RELEASE_DIR/post-install
 
   # Apply pre install manifests if needed
-  if [ -d "$PRE_INSTALL_DIRECTORY" ]; then
-    kubectl apply -f $PRE_INSTALL_DIRECTORY
+  if [ -d "$PRE_INSTALL_DIR" ]; then
+    kubectl apply -R -f $PRE_INSTALL_DIR
   fi
 
-  VALUES_ARGS="--values $RELEASE_DIR/values.yml"
-  if [ -f "$RELEASE_DIR/secrets.yml" ]; then
-    VALUES_ARGS="$VALUE_ARGS --values $RELEASE_DIR/secrets.yml"
-  fi
+  # Install chart if values.yml is found
+  if [ -f "$RELEASE_DIR/values.yml" ]; then
+    VALUES_ARGS="--values $RELEASE_DIR/values.yml"
+    if [ -f "$RELEASE_DIR/secrets.yml" ]; then
+      VALUES_ARGS="$VALUE_ARGS --values $RELEASE_DIR/secrets.yml"
+    fi
 
-  helm upgrade \
-    --install $RELEASE \
-    --namespace $RELEASE \
-    $VALUES_ARGS \
-    $CHART_DIR
+    NAMESPACE=$RELEASE
+    if [ -f "$RELEASE_DIR/NAMESPACE" ]; then
+      NAMESPACE=`cat $RELEASE_DIR/NAMESPACE`
+    fi
+
+    helm upgrade \
+      --install $RELEASE \
+      --namespace $NAMESPACE \
+      $VALUES_ARGS \
+      $CHART_DIR
+  else
+    kubectl apply -R -f $INSTALL_DIR
+  fi
 
   # Apply post install manifests if needed
-  if [ -d "$POST_INSTALL_DIRECTORY" ]; then
-    kubectl apply -f $POST_INSTALL_DIRECTORY
+  if [ -d "$POST_INSTALL_DIR" ]; then
+    kubectl apply -R -f $POST_INSTALL_DIR
   fi
 }
 

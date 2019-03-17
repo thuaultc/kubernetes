@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: docker-registry
+  namespace: docker-registry
+spec:
+  accessModes:
+  - ReadWriteMany
+  selector:
+    matchLabels:
+      name: docker-registry
+  storageClassName: rook-cephfs
+  resources:
+    requests:
+      storage: 200Gi
