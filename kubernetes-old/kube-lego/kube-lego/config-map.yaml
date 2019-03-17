@@ -1,9 +1,0 @@
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: kube-lego
-  namespace: kube-lego
-data:
-  lego.email: "thuaultc@gmail.com"
-  lego.url: "https://acme-v01.api.letsencrypt.org/directory"
