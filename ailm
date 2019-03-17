@@ -1,0 +1,85 @@
+#!/bin/bash
+
+set -e
+
+SCRIPT_PATH="$(cd "$(dirname "$0")"; pwd -P)"
+
+CHARTS_PATH="$SCRIPT_PATH/charts"
+RELEASES_PATH="$SCRIPT_PATH/releases"
+
+usage() {
+  echo "usage: $0 action release"
+  echo -e "\taction: (list|status|install|history)"
+  exit 1
+}
+
+if [[ $# -lt 1 ]]; then
+  usage
+fi
+
+ACTION=$1
+RELEASE=$2
+
+execute_list() {
+  helm list
+}
+
+execute_status() {
+  helm status $RELEASE
+}
+
+execute_history() {
+  helm history $RELEASE
+}
+
+execute_install() {
+  CHART_DIR="$CHARTS_PATH/$RELEASE"
+  RELEASE_DIR="$RELEASES_PATH/$RELEASE"
+
+  PRE_INSTALL_DIR=$RELEASE_DIR/pre-install
+  POST_INSTALL_DIR=$RELEASE_DIR/post-install
+
+  # Apply pre install manifests if needed
+  if [ -d "$PRE_INSTALL_DIRECTORY" ]; then
+    kubectl apply -f $PRE_INSTALL_DIRECTORY
+  fi
+
+  VALUES_ARGS="--values $RELEASE_DIR/values.yml"
+  if [ -f "$RELEASE_DIR/secrets.yml" ]; then
+    VALUES_ARGS="$VALUE_ARGS --values $RELEASE_DIR/secrets.yml"
+  fi
+
+  helm upgrade \
+    --install $RELEASE \
+    --namespace $RELEASE \
+    $VALUES_ARGS \
+    $CHART_DIRECTORY
+
+  # Apply post install manifests if needed
+  if [ -d "$POST_INSTALL_DIRECTORY" ]; then
+    kubectl apply -f $POST_INSTALL_DIRECTORY
+  fi
+}
+
+case $ACTION in
+    list)
+        echo "Listing installed releases..."
+        execute_list
+        ;;
+    status)
+        echo "Showing status of release $RELEASE..."
+        execute_status
+        ;;
+    install)
+        echo "Installing release $RELEASE..."
+        execute_install
+        ;;
+    history)
+        echo "Showing history of release $RELEASE..."
+        execute_history
+        ;;
+    *)
+        echo "Unknown action, aborting..."
+        usage
+        ;;
+esac
