@@ -13,6 +13,13 @@ usage() {
   exit 1
 }
 
+check_release_arg() {
+  if [[ $# -lt 2 ]]; then
+    echo "error: Missing release name"
+    exit 1
+  fi
+}
+
 if [[ $# -lt 1 ]]; then
   usage
 fi
@@ -78,14 +85,17 @@ case $ACTION in
         execute_list
         ;;
     status)
+        check_release_arg
         echo "Showing status of release $RELEASE..."
         execute_status
         ;;
     install)
+        check_release_arg
         echo "Installing release $RELEASE..."
         execute_install
         ;;
     history)
+        check_release_arg
         echo "Showing history of release $RELEASE..."
         execute_history
         ;;
