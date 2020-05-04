@@ -1,15 +1,15 @@
-replicaCount: 3
 ingress:
   enabled: true
   path: /
   hosts:
     - registry.thuault.com
   tls:
-    - secretName: registry-tls
+    - secretName: registry.thuault.com-tls
       hosts:
-        - registry.thuault.com
+        - 'registry.thuault.com'
   annotations:
-    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
 persistence:
   enabled: true

@@ -14,7 +14,7 @@ usage() {
 }
 
 check_release_arg() {
-  if [[ $# -lt 2 ]]; then
+  if [[ $# -lt 1 ]]; then
     echo "error: Missing release name"
     exit 1
   fi
@@ -28,15 +28,15 @@ ACTION=$1
 RELEASE=$2
 
 execute_list() {
-  helm list
+  helm list --all-namespaces
 }
 
 execute_status() {
-  helm status $RELEASE
+  helm status $RELEASE -n $RELEASE
 }
 
 execute_history() {
-  helm history $RELEASE
+  helm history $RELEASE -n $RELEASE
 }
 
 execute_install() {
@@ -60,11 +60,9 @@ execute_install() {
     fi
 
     NAMESPACE=$RELEASE
-    if [ -f "$RELEASE_DIR/NAMESPACE" ]; then
-      NAMESPACE=`cat $RELEASE_DIR/NAMESPACE`
-    fi
 
     helm upgrade \
+      --create-namespace \
       --install $RELEASE \
       --namespace $NAMESPACE \
       $VALUES_ARGS \
@@ -85,17 +83,17 @@ case $ACTION in
         execute_list
         ;;
     status)
-        check_release_arg
+        check_release_arg $RELEASE
         echo "Showing status of release $RELEASE..."
         execute_status
         ;;
     install)
-        check_release_arg
+        check_release_arg $RELEASE
         echo "Installing release $RELEASE..."
         execute_install
         ;;
     history)
-        check_release_arg
+        check_release_arg $RELEASE
         echo "Showing history of release $RELEASE..."
         execute_history
         ;;

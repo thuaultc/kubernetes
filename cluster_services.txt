@@ -1,0 +1,3 @@
+nginx-ingress
+cert-manager
+docker-registry

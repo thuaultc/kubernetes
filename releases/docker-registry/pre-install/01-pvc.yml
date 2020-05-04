@@ -5,11 +5,10 @@ metadata:
   namespace: docker-registry
 spec:
   accessModes:
-  - ReadWriteMany
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
   selector:
     matchLabels:
       name: docker-registry
-  storageClassName: rook-cephfs
-  resources:
-    requests:
-      storage: 200Gi

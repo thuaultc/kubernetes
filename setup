@@ -1,0 +1,54 @@
+#!/bin/bash
+
+set -e
+
+SCRIPT_PATH="$(cd "$(dirname "$0")"; pwd -P)"
+
+usage() {
+  echo "usage: $0 action"
+  echo -e "\taction: (namespaces|cluster)"
+  exit 1
+}
+
+if [[ $# -lt 1 ]]; then
+  usage
+fi
+
+ACTION=$1
+
+create_namespace() {
+  cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${1}
+EOF
+}
+
+install_namespaces() {
+  for NAMESPACE in `cat namespaces.txt`; do
+    create_namespace ${NAMESPACE};
+  done
+}
+
+install_cluster() {
+  for SERVICE in `cat cluster_services.txt`; do
+    create_namespace ${SERVICE};
+    ./ailm install ${SERVICE};
+  done
+}
+
+case $ACTION in
+    namespaces)
+        echo "Creating namespaces..."
+        install_namespaces
+        ;;
+    cluster)
+        echo "Installing basic services..."
+        install_cluster
+        ;;
+    *)
+        echo "Unknown action, aborting..."
+        usage
+        ;;
+esac
