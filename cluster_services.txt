@@ -1,3 +1,4 @@
 nginx-ingress
+external-dns
 cert-manager
 docker-registry
