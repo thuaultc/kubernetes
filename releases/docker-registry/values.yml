@@ -3,10 +3,14 @@ ingress:
   path: /
   hosts:
     - registry.thuault.com
+    - registry.satreix.com
   tls:
     - secretName: registry.thuault.com-tls
       hosts:
         - 'registry.thuault.com'
+    - secretName: registry.satreix.com-tls
+      hosts:
+        - 'registry.satreix.com'
   annotations:
     external-dns.alpha.kubernetes.io/hostname: registry.thuault.com
     cert-manager.io/cluster-issuer: letsencrypt-prod
