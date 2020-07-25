@@ -23,6 +23,8 @@ kind: Namespace
 metadata:
   name: ${1}
 EOF
+
+  kubectl apply -f private-registry-secret.yml -n ${1}
 }
 
 install_namespaces() {
