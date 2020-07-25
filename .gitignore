@@ -1,1 +1,2 @@
 releases/**/secrets.yml
+private-registry-secret.yml
