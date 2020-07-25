@@ -1,6 +1,5 @@
 #!/bin/bash
-
-set -e
+set -euo pipefail
 
 SCRIPT_PATH="$(cd "$(dirname "$0")"; pwd -P)"
 
@@ -27,48 +26,26 @@ fi
 ACTION=$1
 RELEASE=$2
 
-CHART_DIR="$CHARTS_PATH/$RELEASE"
-RELEASE_DIR="$RELEASES_PATH/$RELEASE"
-
-CHART=$RELEASE
-if [ -f "$RELEASE_DIR/CHART" ]; then
-  CHART=`cat $RELEASE_DIR/CHART`
-fi
-NAMESPACE=$RELEASE
-if [ -f "$RELEASE_DIR/NAMESPACE" ]; then
-  NAMESPACE=`cat $RELEASE_DIR/NAMESPACE`
-fi
-
-PRE_INSTALL_DIR=$RELEASE_DIR/pre-install
-INSTALL_DIR=$RELEASE_DIR/install
-POST_INSTALL_DIR=$RELEASE_DIR/post-install
-
-
 execute_list() {
   helm list --all-namespaces
 }
 
 execute_status() {
-  RELEASE_DIR="$RELEASES_PATH/$RELEASE"
-  NAMESPACE=$RELEASE
-  if [ -f "$RELEASE_DIR/NAMESPACE" ]; then
-    NAMESPACE=`cat $RELEASE_DIR/NAMESPACE`
-  fi
-
-  helm status $RELEASE -n $NAMESPACE
+  helm status $RELEASE -n $RELEASE
 }
 
 execute_history() {
-  RELEASE_DIR="$RELEASES_PATH/$RELEASE"
-  NAMESPACE=$RELEASE
-  if [ -f "$RELEASE_DIR/NAMESPACE" ]; then
-    NAMESPACE=`cat $RELEASE_DIR/NAMESPACE`
-  fi
-
-  helm history $RELEASE -n $NAMESPACE
+  helm history $RELEASE -n $RELEASE
 }
 
 execute_install() {
+  CHART_DIR="$CHARTS_PATH/$RELEASE"
+  RELEASE_DIR="$RELEASES_PATH/$RELEASE"
+
+  PRE_INSTALL_DIR=$RELEASE_DIR/pre-install
+  INSTALL_DIR=$RELEASE_DIR/install
+  POST_INSTALL_DIR=$RELEASE_DIR/post-install
+
   # Apply pre install manifests if needed
   if [ -d "$PRE_INSTALL_DIR" ]; then
     kubectl apply -R -f $PRE_INSTALL_DIR
@@ -78,15 +55,17 @@ execute_install() {
   if [ -f "$RELEASE_DIR/values.yml" ]; then
     VALUES_ARGS="--values $RELEASE_DIR/values.yml"
     if [ -f "$RELEASE_DIR/secrets.yml" ]; then
-      VALUES_ARGS="$VALUE_ARGS --values $RELEASE_DIR/secrets.yml"
+      VALUES_ARGS="$VALUES_ARGS --values $RELEASE_DIR/secrets.yml"
     fi
+
+    NAMESPACE=$RELEASE
 
     helm upgrade \
       --create-namespace \
       --install $RELEASE \
       --namespace $NAMESPACE \
       $VALUES_ARGS \
-      $CHARTS_PATH/$CHART
+      $CHART_DIR
   else
     kubectl apply -R -f $INSTALL_DIR
   fi
