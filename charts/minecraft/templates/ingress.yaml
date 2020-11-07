@@ -2,7 +2,6 @@ kind: Ingress
 apiVersion: extensions/v1beta1
 metadata:
   name: {{ include "minecraft.fullname" . }}-dynmap
-  namespace: {{ .Values.namespace }}
   annotations:
     external-dns.alpha.kubernetes.io/hostname: {{ .Values.hosting.mapHostname }}
     cert-manager.io/cluster-issuer: letsencrypt-prod

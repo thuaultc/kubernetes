@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "minecraft.fullname" . }}
-  namespace: {{ .Values.namespace }}
   labels:
     {{- include "minecraft.labels" . | nindent 4 }}
 spec:
