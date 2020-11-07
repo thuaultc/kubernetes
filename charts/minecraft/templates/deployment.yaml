@@ -35,19 +35,52 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+          - containerPort: 25565
+            name: minecraft
+          - containerPort: 8123
+            name: dynmap
+          env:
+          - name: EULA
+            value: "TRUE"
+          - name: DIFFICULTY
+            value: "hard"
+          - name: OPS
+            value: {{ .Values.game.ops }}
+          - name: ICON
+            value: {{ .Values.game.icon }}
+          - name: ALLOW_NETHER
+            value: "true"
+          - name: GENERATE_STRUCTURES
+            value: "true"
+          - name: FORCE_GAMEMODE
+            value: "true"
+          - name: MAX_BUILD_HEIGHT
+            value: {{ .Values.game.maxBuildHeight }}
+          - name: VIEW_DISTANCE
+            value: {{ .Values.game.viewDistance }}
+          - name: MODE
+            value: "survival"
+          - name: LEVEL_TYPE
+            value: "DEFAULT"
+          - name: ANNOUNCE_PLAYER_ACHIEVEMENTS
+            value: "false"
+          - name: INIT_MEMORY
+            value: {{ .Values.game.minMemory }}
+          - name: MAX_MEMORY
+            value: {{ .Values.game.maxMemory }}
+          - name: TYPE
+            value: "SPIGOT"
+          - name: VERSION
+            value: {{ .Values.game.version }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+        volumeMounts:
+          - mountPath: /data
+            name: {{ include "minecraft.fullname" . }}-data
+      volumes:
+        - name: {{ include "minecraft.fullname" . }}-data
+          persistentVolumeClaim:
+            claimName: {{ include "minecraft.fullname" . }}-pvc
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

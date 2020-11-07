@@ -9,7 +9,7 @@ metadata:
 spec:
   tls:
   - hosts:
-    - {{ .Values.mapHostname }}
+    - {{ .Values.hosting.mapHostname }}
     secretName: {{ include "minecraft.fullname" . }}-tls
   rules:
   - host: {{ .Values.hosting.mapHostname }}
