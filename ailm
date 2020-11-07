@@ -59,6 +59,9 @@ execute_install() {
     fi
 
     NAMESPACE=$RELEASE
+    if [ -f "$RELEASE_DIR/NAMESPACE" ]; then
+      NAMESPACE=`cat -e "$RELEASE_DIR/NAMESPACE"`
+    fi
 
     helm upgrade \
       --create-namespace \
