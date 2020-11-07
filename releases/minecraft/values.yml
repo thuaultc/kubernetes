@@ -2,6 +2,7 @@ game:
   ops: "Tapus"
   version: "1.16.4"
   icon: "https://static.planetminecraft.com/files/resource_media/screenshot/1505/crafting-table-icon8582441.jpg"
+  motd: "Focus Nek0las!"
   maxBuildHeight: "256"
   viewDistance: "10"
   minMemory: "8G"
