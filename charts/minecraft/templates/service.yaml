@@ -1,0 +1,29 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ include "minecraft.fullname" . }}-dynmap
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "minecraft.labels" . | nindent 4 }}
+spec:
+  ports:
+  - port: 80
+    targetPort: 8123
+    protocol: TCP
+  selector:
+    {{- include "minecraft.selectorLabels" . | nindent 4 }}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ include "minecraft.fullname" . }}
+  namespace: minecraft
+  labels:
+    {{- include "minecraft.labels" . | nindent 4 }}
+spec:
+  type: NodePort
+  selector:
+    {{- include "minecraft.selectorLabels" . | nindent 4 }}
+  ports:
+  - port: 25565
+    nodePort: {{ .Values.hosting.nodePort }}

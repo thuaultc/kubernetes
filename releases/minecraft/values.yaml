@@ -1,0 +1,15 @@
+namespace: clement-default
+game:
+  ops: "Tapus"
+  version: "1.16.4"
+  icon: "https://static.planetminecraft.com/files/resource_media/screenshot/1505/crafting-table-icon8582441.jpg"
+  maxBuildHeight: "256"
+  viewDistance: "10"
+  minMemory: "8G"
+  maxMemory: "12G"
+hosting:
+  nodePort: 30010
+  mapHostname: minecraft.thuault.com
+storage:
+  size: 20Gi
+  path: /data/clement/minecraft

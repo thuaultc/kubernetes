@@ -1,0 +1,22 @@
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: {{ include "minecraft.fullname" . }}-dynmap
+  namespace: {{ .Values.namespace }}
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: {{ .Values.hosting.mapHostname }}
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+  - hosts:
+    - {{ .Values.mapHostname }}
+    secretName: {{ include "minecraft.fullname" . }}-tls
+  rules:
+  - host: {{ .Values.hosting.mapHostname }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ include "minecraft.fullname" . }}-dynmap
+          servicePort: 80
+
