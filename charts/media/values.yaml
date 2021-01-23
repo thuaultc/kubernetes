@@ -1,0 +1,8 @@
+# general:
+#   plexHost: plex.hostname.tld
+#   mediaHost: media.hostname.tld
+#     uid: 1000
+#     gid: 1000
+#     storage:
+#       size: 100Gi
+#       path: /data
