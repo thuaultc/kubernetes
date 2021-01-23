@@ -71,8 +71,17 @@ spec:
           value: "{{ .Values.game.minMemory }}"
         - name: MAX_MEMORY
           value: "{{ .Values.game.maxMemory }}"
+        {{ if .Values.game.feedTheBeastId }}
+        - name: TYPE
+          value: "FTBA"
+        - name: FTB_MODPACK_ID
+          value: "{{ .Values.game.feedTheBeastId }}"
+        - name: FTB_MODPACK_VERSION_ID
+          value: "{{ .Values.game.feedTheBeastVersionId }}"
+        {{ else }}
         - name: TYPE
           value: "SPIGOT"
+        {{ end }}
         - name: VERSION
           value: "{{ .Values.game.version }}"
         volumeMounts:
@@ -81,4 +90,4 @@ spec:
       volumes:
         - name: minecraft-data
           persistentVolumeClaim:
-            claimName: minecraft-pvc
+            claimName: {{ include "minecraft.fullname" . }}-pvc

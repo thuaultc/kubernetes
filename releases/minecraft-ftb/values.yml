@@ -1,0 +1,16 @@
+image:
+  tag: "multiarch"
+game:
+  ops: "Tapus"
+  version: "1.7.10"
+  icon: "https://static.planetminecraft.com/files/resource_media/screenshot/1505/crafting-table-icon8582441.jpg"
+  viewDistance: "10"
+  minMemory: "8G"
+  maxMemory: "12G"
+  feedTheBeastId: "23"
+  feedTheBeastVersionId: "99"
+hosting:
+  nodePort: 30020
+storage:
+  size: 20Gi
+  path: /data/clement/minecraft-ftb
