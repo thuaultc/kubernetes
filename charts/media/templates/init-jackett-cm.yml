@@ -1,0 +1,14 @@
+apiVersion: v1
+data:
+  ServerConfig.json: |
+    {
+      "BasePathOverride": "/jackett",
+      "BlackholeDir": "/downloads"
+    }
+  init-jackett.sh: |
+    #!/bin/bash
+    mkdir -p /jackett-config/Jackett
+    cp -n /init-jackett/ServerConfig.json /jackett-config/Jackett/ServerConfig.json
+kind: ConfigMap
+metadata:
+  name: init-jackett-cm

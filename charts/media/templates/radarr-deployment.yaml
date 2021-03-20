@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radarr
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "media.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "media.selectorLabels" . | nindent 8 }}
+        app: radarr
+    spec:
+      initContainers:
+        - name: config-radarr
+          image: bitnami/kubectl:latest
+          imagePullPolicy: IfNotPresent
+          command: ["/init-radarr/init-radarr.sh"]
+          volumeMounts:
+            - mountPath: /init-radarr
+              name: init-files-radarr
+            - mountPath: /radarr-config
+              name: media-config-volume
+          securityContext:
+            runAsUser: {{ .Values.general.puid }}
+            runAsGroup: {{ .Values.general.pgid }}
+      containers:
+        - name: {{ .Chart.Name }}
+          envFrom:
+            - configMapRef:
+                name: radarr-config
+          image: "docker.io/linuxserver/radarr:latest"
+          imagePullPolicy: IfNotPresent
+          readinessProbe:
+            tcpSocket:
+              port: 7878
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          ports:
+            - name: radarr-port
+              containerPort: 7878
+              protocol: TCP
+          volumeMounts:
+            - name: media-config-volume
+              mountPath: "/config"
+            - name: media-downloads-volume
+              mountPath: "/downloads"
+            - name: media-library-movies-volume
+              mountPath: "/movies"
+      volumes:
+        - name: media-config-volume
+          persistentVolumeClaim:
+            claimName: {{ include "media.fullname" . }}-config-radarr-pvc
+        - name: media-downloads-volume
+          persistentVolumeClaim:
+            claimName: {{ include "media.fullname" . }}-downloads-transmission-pvc
+        - name: media-library-movies-volume
+          persistentVolumeClaim:
+            claimName: {{ include "media.fullname" . }}-library-movies-pvc
+        - name: init-files-radarr
+          configMap:
+            defaultMode: 493
+            name: init-radarr-cm
+      {{- with .Values.general.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

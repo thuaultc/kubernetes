@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jackett
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "media.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "media.selectorLabels" . | nindent 8 }}
+        app: jackett
+    spec:
+      initContainers:
+        - name: config-jackett
+          image: bitnami/kubectl:latest
+          imagePullPolicy: IfNotPresent
+          command: ["/init-jackett/init-jackett.sh"]
+          volumeMounts:
+            - mountPath: /init-jackett
+              name: init-files-jackett
+            - mountPath: /jackett-config
+              name: media-config-volume
+          securityContext:
+            runAsUser: {{ .Values.general.puid }}
+            runAsGroup: {{ .Values.general.pgid }}
+      containers:
+        - name: {{ .Chart.Name }}
+          envFrom:
+            - configMapRef:
+                name: jackett-config
+          image: "docker.io/linuxserver/jackett:latest"
+          imagePullPolicy: IfNotPresent
+          readinessProbe:
+            tcpSocket:
+              port: 9117
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          ports:
+            - name: jackett-port
+              containerPort: 9117
+              protocol: TCP
+          volumeMounts:
+            - name: media-config-volume
+              mountPath: "/config"
+            - name: media-downloads-volume
+              mountPath: "/downloads"
+      volumes:
+        - name: media-config-volume
+          persistentVolumeClaim:
+            claimName: {{ include "media.fullname" . }}-config-jackett-pvc
+        - name: media-downloads-volume
+          persistentVolumeClaim:
+            claimName: {{ include "media.fullname" . }}-downloads-transmission-pvc
+        - name: init-files-jackett
+          configMap:
+            defaultMode: 493
+            name: init-jackett-cm
+      {{- with .Values.general.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

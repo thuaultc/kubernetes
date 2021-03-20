@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transmission
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "media.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "media.selectorLabels" . | nindent 8 }}
+        app: transmission
+    spec:
+      initContainers:
+        - name: config-transmission
+          image: bitnami/kubectl:latest
+          imagePullPolicy: IfNotPresent
+          command: ["/init-transmission/init-transmission.sh"]
+          volumeMounts:
+            - mountPath: /init-transmission
+              name: init-files-transmission
+            - name: media-config-volume
+              mountPath: /transmission-config
+          securityContext:
+            runAsUser: {{ .Values.general.puid }}
+            runAsGroup: {{ .Values.general.pgid }}
+      containers:
+        - name: {{ .Chart.Name }}
+          envFrom:
+            - configMapRef:
+                name: transmission-config
+          image: "docker.io/linuxserver/transmission:latest"
+          imagePullPolicy: IfNotPresent
+          readinessProbe:
+            tcpSocket:
+              port: 9091
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          ports:
+            - name: trans-port
+              containerPort: 9091
+              protocol: TCP
+          volumeMounts:
+            - name: media-config-volume
+              mountPath: "/config"
+            - name: media-downloads-volume
+              mountPath: "/downloads"
+      volumes:
+        - name: media-config-volume
+          persistentVolumeClaim:
+            claimName: {{ include "media.fullname" . }}-config-transmission-pvc
+        - name: media-downloads-volume
+          persistentVolumeClaim:
+            claimName: {{ include "media.fullname" . }}-downloads-transmission-pvc
+        - name: init-files-transmission
+          configMap:
+            defaultMode: 493
+            name: init-transmission-cm
+      {{- with .Values.general.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

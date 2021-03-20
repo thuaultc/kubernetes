@@ -1,13 +1,111 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ include "media.fullname" . }}-pv
+  name: {{ include "media.fullname" . }}-library-movies-pv
   labels:
     {{- include "media.labels" . | nindent 4 }}
 spec:
   accessModes:
     - ReadWriteMany
   capacity:
-    storage: {{ .Values.general.storage.size }}
+    storage: 4000Gi
   hostPath:
-    path: {{ .Values.general.storage.path }}
+    path: {{ .Values.general.storage.path }}/library/movies
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "media.fullname" . }}-library-tv-pv
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 4000Gi
+  hostPath:
+    path: {{ .Values.general.storage.path }}/library/tv
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "media.fullname" . }}-config-plex-pv
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 100Gi
+  hostPath:
+    path: {{ .Values.general.storage.path }}/config/plex
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "media.fullname" . }}-config-transmission-pv
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: {{ .Values.general.storage.path }}/config/transmission
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "media.fullname" . }}-config-sonarr-pv
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: {{ .Values.general.storage.path }}/config/sonarr
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "media.fullname" . }}-config-radarr-pv
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: {{ .Values.general.storage.path }}/config/radarr
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "media.fullname" . }}-config-jackett-pv
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: {{ .Values.general.storage.path }}/config/jackett
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "media.fullname" . }}-downloads-transmission-pv
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 4000Gi
+  hostPath:
+    path: {{ .Values.general.storage.path }}/downloads/transmission

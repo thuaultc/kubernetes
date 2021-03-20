@@ -1,0 +1,49 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: media
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: {{ .Values.general.mediaHost }}
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: media-basic-auth
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - media.thuault.com'
+spec:
+  tls:
+    - hosts:
+        - {{ .Values.general.mediaHost | quote }}
+      secretName: {{ include "media.fullname" . }}-media-tls
+  rules:
+    - host: {{ .Values.general.mediaHost | quote }}
+      http:
+        paths:
+          - path: /transmission
+            pathType: Prefix
+            backend:
+              service:
+                name: transmission
+                port:
+                  number: 80
+          - path: /sonarr
+            pathType: Prefix
+            backend:
+              service:
+                name: sonarr
+                port:
+                  number: 80
+          - path: /radarr
+            pathType: Prefix
+            backend:
+              service:
+                name: radarr
+                port:
+                  number: 80
+          - path: /jackett
+            pathType: Prefix
+            backend:
+              service:
+                name: jackett
+                port:
+                  number: 80

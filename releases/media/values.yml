@@ -1,8 +1,7 @@
 general:
   plexHost: plex.thuault.com
   mediaHost: media.thuault.com
-  uid: 1000
-  gid: 1000
+  puid: 1000
+  pgid: 1000
   storage:
-    size: 2500Gi
     path: /data/kube/media

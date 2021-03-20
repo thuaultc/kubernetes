@@ -63,12 +63,17 @@ execute_install() {
       NAMESPACE=`cat -e "$RELEASE_DIR/NAMESPACE"`
     fi
 
+    set -x
+
     helm upgrade \
       --create-namespace \
       --install $RELEASE \
       --namespace $NAMESPACE \
       $VALUES_ARGS \
       $CHART_DIR
+
+    set +x
+
   else
     kubectl apply -R -f $INSTALL_DIR
   fi

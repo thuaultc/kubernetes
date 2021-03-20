@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plex
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "media.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "media.selectorLabels" . | nindent 8 }}
+        app: plex
+    spec:
+      volumes:
+        - name: media-config-volume
+          persistentVolumeClaim:
+            claimName: {{ include "media.fullname" . }}-config-plex-pvc
+        - name: media-library-movies-volume
+          persistentVolumeClaim:
+            claimName: {{ include "media.fullname" . }}-library-movies-pvc
+        - name: media-library-tv-volume
+          persistentVolumeClaim:
+            claimName: {{ include "media.fullname" . }}-library-tv-pvc
+      containers:
+        - name: {{ .Chart.Name }}
+          envFrom:
+            - configMapRef:
+                name: plex-config
+          image: "docker.io/linuxserver/plex:latest"
+          imagePullPolicy: IfNotPresent
+          readinessProbe:
+            tcpSocket:
+              port: 32400
+            initialDelaySeconds: 20
+            periodSeconds: 15
+          ports:
+            - name: plex-port
+              containerPort: 32400
+              protocol: TCP
+          volumeMounts:
+            - name: media-config-volume
+              mountPath: "/config"
+            - name: media-library-movies-volume
+              mountPath: "/movies"
+            - name: media-library-tv-volume
+              mountPath: "/tv"
+          resources:
+            limits:
+              cpu: 8
+              memory: 24Gi
+            requests:
+              cpu: 2
+              memory: 24Gi

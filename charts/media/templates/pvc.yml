@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "media.fullname" . }}-pvc
+  name: {{ include "media.fullname" . }}-library-movies-pvc
   labels:
     {{- include "media.labels" . | nindent 4 }}
 spec:
@@ -9,7 +9,103 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: {{ .Values.general.storage.size }}
-  selector:
-    matchLabels:
-      {{- include "media.selectorLabels" . | nindent 6 }}
+      storage: 4000Gi
+  volumeName: {{ include "media.fullname" . }}-library-movies-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "media.fullname" . }}-library-tv-pvc
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 4000Gi
+  volumeName: {{ include "media.fullname" . }}-library-tv-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "media.fullname" . }}-config-plex-pvc
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  volumeName: {{ include "media.fullname" . }}-config-plex-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "media.fullname" . }}-config-transmission-pvc
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: {{ include "media.fullname" . }}-config-transmission-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "media.fullname" . }}-config-sonarr-pvc
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: {{ include "media.fullname" . }}-config-sonarr-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "media.fullname" . }}-config-radarr-pvc
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: {{ include "media.fullname" . }}-config-radarr-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "media.fullname" . }}-config-jackett-pvc
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: {{ include "media.fullname" . }}-config-jackett-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "media.fullname" . }}-downloads-transmission-pvc
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 4000Gi
+  volumeName: {{ include "media.fullname" . }}-downloads-transmission-pv

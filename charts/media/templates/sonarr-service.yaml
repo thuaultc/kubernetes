@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarr
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8989
+      protocol: TCP
+      name: sonarr-port
+  selector:
+    app: sonarr

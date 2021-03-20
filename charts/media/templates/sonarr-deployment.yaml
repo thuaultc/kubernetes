@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr
+  labels:
+    {{- include "media.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "media.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "media.selectorLabels" . | nindent 8 }}
+        app: sonarr
+    spec:
+      initContainers:
+        - name: config-sonarr
+          image: bitnami/kubectl:latest
+          imagePullPolicy: IfNotPresent
+          command: ["/init-sonarr/init-sonarr.sh"]
+          volumeMounts:
+            - mountPath: /init-sonarr
+              name: init-files-sonarr
+            - mountPath: /sonarr-config
+              name: media-config-volume
+          securityContext:
+            runAsUser: {{ .Values.general.puid }}
+            runAsGroup: {{ .Values.general.pgid }}
+      containers:
+        - name: {{ .Chart.Name }}
+          envFrom:
+            - configMapRef:
+                name: sonarr-config
+          image: "docker.io/linuxserver/sonarr:latest"
+          imagePullPolicy: IfNotPresent
+          readinessProbe:
+            tcpSocket:
+              port: 8989
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          ports:
+            - name: sonarr-port
+              containerPort: 8989
+              protocol: TCP
+          volumeMounts:
+            - name: media-config-volume
+              mountPath: "/config"
+            - name: media-downloads-volume
+              mountPath: "/downloads"
+            - name: media-library-tv-volume
+              mountPath: "/tv"
+      volumes:
+        - name: media-config-volume
+          persistentVolumeClaim:
+            claimName: {{ include "media.fullname" . }}-config-sonarr-pvc
+        - name: media-downloads-volume
+          persistentVolumeClaim:
+            claimName: {{ include "media.fullname" . }}-downloads-transmission-pvc
+        - name: media-library-tv-volume
+          persistentVolumeClaim:
+            claimName: {{ include "media.fullname" . }}-library-tv-pvc
+        - name: init-files-sonarr
+          configMap:
+            defaultMode: 493
+            name: init-sonarr-cm
+      {{- with .Values.general.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
